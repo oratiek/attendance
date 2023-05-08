@@ -5,6 +5,8 @@ from datetime import datetime
 from gtts import gTTS
 import tkinter as tk
 
+# GUI
+
 class Attendance():
     def __init__(self):
         self.clf = nfc.ContactlessFrontend("usb")
