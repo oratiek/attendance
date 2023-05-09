@@ -11,13 +11,15 @@ class Attendance():
         self.logs = []
         # read log.csv and add todays logs
         today = datetime.now().date()
-        with open("log.csv", "r") as f:
+        # create log file
+        self.log_file_path = "{}.csv".format(today)
+        os.system("touch {}".format(self.log_file_path))
+        with open(self.log_file_path, "r") as f:
             for row in csv.reader(f):
                 timestamp = row[0].strip(" ")
                 timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S").date()
                 if timestamp == today:
                     self.logs.append(row[1])
-        print(self.logs)
          
     def student_number_to_mp3(self, student_number):
         # ask for data
@@ -33,7 +35,7 @@ class Attendance():
     # with other card, dump data will be different and occur errors and die
     # need to check if scanned card is correct one
     def main(self):
-        f = open("log.csv", "a") # even if exception occurs, data will be saved
+        f = open(self.log_file_path, "a") # even if exception occurs, data will be saved
         writer = csv.writer(f)
         while True:
             try:
@@ -45,9 +47,11 @@ class Attendance():
                     timestamp = datetime.now()
                     timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
                     writer.writerow([timestamp, student_number])
-                    self.student_number_to_mp3(student_number)
-                    os.system("afplay greeting.mp3")
-                    self.logs.append(target)
+                    #self.student_number_to_mp3(student_number)
+                    #os.system("afplay greeting.mp3")
+                    self.logs.append(student_number)
+                    print(student_number)
+                    os.system("afplay ok.mp3")
                 else:
                     print("already registered")
                     os.system("afplay already_registered.mp3")
