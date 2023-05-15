@@ -50,10 +50,10 @@ class Attendance():
                     #self.student_number_to_mp3(student_number)
                     self.logs.append(student_number)
                     print(student_number)
-                    os.system("mpg123 ok.mp3")
+                    os.system("mpg123 ok.mp3 > /dev/null")
                 else:
                     print("already registered")
-                    os.system("mpg123 already_registered.mp3")
+                    os.system("mpg123 already_registered.mp3 > /dev/null")
             except nfc.tag.tt3.Type3TagCommandError:
                 print("error")
 
