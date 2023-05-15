@@ -48,13 +48,12 @@ class Attendance():
                     timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
                     writer.writerow([timestamp, student_number])
                     #self.student_number_to_mp3(student_number)
-                    #os.system("afplay greeting.mp3")
                     self.logs.append(student_number)
                     print(student_number)
-                    os.system("afplay ok.mp3")
+                    os.system("mpg123 ok.mp3")
                 else:
                     print("already registered")
-                    os.system("afplay already_registered.mp3")
+                    os.system("mpg123 already_registered.mp3")
             except nfc.tag.tt3.Type3TagCommandError:
                 print("error")
 
