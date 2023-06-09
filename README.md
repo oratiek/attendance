@@ -2,6 +2,7 @@
 
 # requirements
 RaspberryPi 3 or 4
+
 NFC reader RC-S380
 
 # installation
