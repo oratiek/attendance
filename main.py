@@ -7,7 +7,6 @@ import tkinter as tk
 
 class Attendance():
     def __init__(self):
-        self.clf = nfc.ContactlessFrontend("usb")
         self.logs = []
         # read log.csv and add todays logs
         today = datetime.now().date()
@@ -35,28 +34,29 @@ class Attendance():
     # with other card, dump data will be different and occur errors and die
     # need to check if scanned card is correct one
     def main(self):
-        f = open(self.log_file_path, "a") # even if exception occurs, data will be saved
-        writer = csv.writer(f)
-        while True:
-            try:
-                tag = self.clf.connect(rdwr={'on-connect': lambda tag: False})
-                target = tag.dump()[33]
-                target = target.split("|")[1]
-                student_number = target.split("002062")[0]
-                if not student_number in self.logs:
-                    timestamp = datetime.now()
-                    timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-                    writer.writerow([timestamp, student_number])
-                    #self.student_number_to_mp3(student_number)
-                    #os.system("afplay greeting.mp3")
-                    self.logs.append(student_number)
-                    print(student_number)
-                    os.system("afplay ok.mp3")
-                else:
-                    print("already registered")
-                    os.system("afplay already_registered.mp3")
-            except nfc.tag.tt3.Type3TagCommandError:
-                print("error")
+        with nfc.ContactlessFrontend("usb") as clf:
+            with open(self.log_file_path, "a") as f:# even if exception occurs, data will be saved
+                writer = csv.writer(f)
+                while True:
+                    try:
+                        tag = clf.connect(rdwr={'on-connect': lambda tag: False})
+                        target = tag.dump()[33]
+                        target = target.split("|")[1]
+                        student_number = target.split("002062")[0]
+                        if not student_number in self.logs:
+                            timestamp = datetime.now()
+                            timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                            writer.writerow([timestamp, student_number])
+                            #self.student_number_to_mp3(student_number)
+                            #os.system("afplay greeting.mp3")
+                            self.logs.append(student_number)
+                            print(student_number)
+                            os.system("afplay ok.mp3")
+                        else:
+                            print("already registered")
+                            os.system("afplay already_registered.mp3")
+                    except nfc.tag.tt3.Type3TagCommandError:
+                        print("error")
 
 if __name__ == "__main__":
     attendance = Attendance()
