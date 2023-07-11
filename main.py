@@ -8,7 +8,7 @@ from datetime import datetime
 import nfc
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s:%(name)s - %(message)s", filename="/home/keitaro/Desktop/attendance/test_log.log")
+#logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s:%(name)s - %(message)s", filename="/home/keitaro/Desktop/attendance/test_log.log")
 
 
 class Attendance():
@@ -26,9 +26,10 @@ class Attendance():
         self.admins = ["72047937"]
         
         today = datetime.now().date()
-        self.log_file_path = "/home/keitaro/Desktop/attendance/log/{}.csv".format(today)
+        self.log_file_path = "/home/attendance/Desktop/attendance/log/{}.csv".format(today)
         if not os.path.exists(self.log_file_path):
-            os.system(self.log_file_path)
+            print("create new log file")
+            os.system("touch {}".format(self.log_file_path))
         self.log = []
     
     def ready(self):
@@ -64,21 +65,25 @@ class Attendance():
             time.sleep(0.05)
 
     def on_connect(self, tag):
+        print("from on_connect")
         sc = nfc.tag.tt3.ServiceCode(68, 0x0b)
         bc = nfc.tag.tt3.BlockCode(1, service=0)
         data_num = tag.read_without_encryption([sc], [bc])
         data_num = data_num.decode("shift_jis")
         student_id = data_num[:8]
-        print(student_id)
+        #print(student_id)
         timestamp = datetime.now()
+        
+        print("condition..")
         if student_id in self.log:
             print("Already Registered")
             self.already_registered()
         else:
+            print("attend")
+            
             with open(self.log_file_path, "a") as f:
                 writer = csv.writer(f)
                 writer.writerow([timestamp, student_id])
-            print("attend")
             self.attend()
             self.log.append(student_id)
 
@@ -86,6 +91,8 @@ class Attendance():
             print("exit")
             self.close_system()
             sys.exit(0)
+
+        print("done")
 
         return True
 
@@ -107,9 +114,9 @@ class Attendance():
         # mainloop
         while True:
             self.battery_check()
-            logging.info("mainloop started")
+            #logging.info("mainloop started")
             try:
-                logging.info("tag found")
+                #logging.info("tag found")
                 tag = clf.connect(rdwr={'on-connect': self.on_connect})
             except nfc.tag.tt3.Type3TagCommandError:
                 print("error")
