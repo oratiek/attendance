@@ -1,29 +1,29 @@
 # attendance system
 
-# requirements
+### requirements
 RaspberryPi 3 or 4
 
 NFC reader RC-S380
 
-# installation
+### installation
 ```bash
 sudo pip install nfcpy
 ```
 
-# run
+### run
 ```python
 sudo python main.py
 ```
 
-# note
+### note
 You need to run as root.
 
-# device info
+### device info
 - username: attendance
 - password: attendance
 - devicename: raspberrypi
 
-# ssh
+### ssh
 ```bash
 ssh attendance@raspberrypi.local
 ```
