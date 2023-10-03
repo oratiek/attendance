@@ -17,3 +17,14 @@ sudo python main.py
 
 # note
 You need to run as root.
+
+# device info
+- username: attendance
+- password: attendance
+- devicename: raspberrypi
+
+# ssh
+```bash
+ssh attendance@raspberrypi.local
+```
+
